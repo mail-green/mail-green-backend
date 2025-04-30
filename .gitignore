@@ -23,9 +23,13 @@ Thumbs.db
 # MySQL 또는 SQLite DB (사용 시)
 *.db
 *.sqlite3
+dump.rdb
 
 # 테스트 결과 및 캐시
 .pytest_cache/
 .coverage
 htmlcov/
 .cache/
+
+# Chroma Storage
+chroma/
