@@ -29,3 +29,6 @@ Thumbs.db
 .coverage
 htmlcov/
 .cache/
+
+# Chroma Storage
+chroma/
