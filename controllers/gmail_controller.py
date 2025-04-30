@@ -3,7 +3,6 @@ from logger import get_logger
 from embedding_service import EmbeddingService
 from gmail_service import fetch_message, process_batch
 from tasks import embed_and_store_batch
-import asyncio
 import aiohttp
 import time
 
@@ -11,21 +10,21 @@ router = APIRouter(prefix="/gmail", tags=["gmail"])
 logger = get_logger("gmail_controller")
 embedding_service = EmbeddingService()
 
-@router.get('/messages/{msg_id}')
-async def get_gmail_message(msg_id: str, request: Request):
-    try:
-        token = request.session.get('token')
-        if not token:
-            raise HTTPException(status_code=401, detail="로그인 필요")
-        async with aiohttp.ClientSession() as session:
-            msg = await fetch_message(session, msg_id, token)
-        if not msg:
-            logger.warning(f"메시지 {msg_id}를 찾을 수 없습니다.")
-            raise HTTPException(status_code=404, detail="메시지 없음")
-        return msg
-    except Exception as e:
-        logger.error(f"Gmail 메시지 조회 실패: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="서버 오류")
+# @router.get('/messages/{msg_id}')
+# async def get_gmail_message(msg_id: str, request: Request):
+#     try:
+#         token = request.session.get('token')
+#         if not token:
+#             raise HTTPException(status_code=401, detail="로그인 필요")
+#         async with aiohttp.ClientSession() as session:
+#             msg = await fetch_message(session, msg_id, token)
+#         if not msg:
+#             logger.warning(f"메시지 {msg_id}를 찾을 수 없습니다.")
+#             raise HTTPException(status_code=404, detail="메시지 없음")
+#         return msg
+#     except Exception as e:
+#         logger.error(f"Gmail 메시지 조회 실패: {e}", exc_info=True)
+#         raise HTTPException(status_code=500, detail="서버 오류")
 
 @router.get('/messages')
 async def get_gmail_messages(request: Request, max_results: int = 10):

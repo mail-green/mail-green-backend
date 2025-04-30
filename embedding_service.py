@@ -1,5 +1,6 @@
 from sentence_transformers import SentenceTransformer
 import chromadb
+import os
 
 def categorize_email(subject, body):
     text = (subject + " " + body).lower()
@@ -32,7 +33,17 @@ class EmbeddingService:
                 normalize_embeddings=True
             )
         self.encode = encode.__get__(self)
-        self.client = chromadb.PersistentClient(path="./storage/chroma")
+        
+        # ChromaDB 설정
+        db_path = "./storage/chroma"
+        os.makedirs(db_path, exist_ok=True)
+        self.client = chromadb.PersistentClient(
+            path=db_path,
+            settings=chromadb.Settings(
+                allow_reset=True,
+                is_persistent=True
+            )
+        )
         self.collection = self.client.get_or_create_collection("emails")
 
     def embed_and_store(self, emails):

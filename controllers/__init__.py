@@ -7,5 +7,5 @@ from .user_controller import router as user_router
 routers = [
     auth_router,
     user_router,
-    # gmail_router,
+    gmail_router,
 ] 
